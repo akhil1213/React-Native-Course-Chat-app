@@ -2,27 +2,7 @@ import React from "react";
 import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar } from "react-native";
 import Swipeout from 'react-native-swipeout'
 
-const DATA = [
-  {
-    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-    className:'CS-381',
-    profName:'Akhil Khanna',
-    time:'01:30'
-  },
-  {
-    id: "bd7acbea-c1b1-462-aed5-3ad53abb28ba",
-    className:'CS-381',
-    profName:'Akhil Khanna',
-    time:'01:30'
-  },
-  {
-    id: "bd7acbea-c1b1-46c2aed5-3ad53abb28ba",
-    className:'CS-381',
-    profName:'Akhil Khanna',
-    time:'01:30'
-  },
-  
-];
+
 
 {/* <FlatList
                data={this.state.images}
@@ -46,7 +26,7 @@ const swipeoutBtns = [
      },
 ];
 const Item = ({ item }) => (
-    <Swipeout style = {styles.swipeout} autoClose={true} right={swipeoutBtns}>
+  <Swipeout style = {styles.swipeout} autoClose={true} right={swipeoutBtns}>
     <View style={styles.item}>
         <Text style={styles.title}>{item.className}</Text>
         <Text>{item.profName}</Text>
@@ -55,14 +35,15 @@ const Item = ({ item }) => (
   </Swipeout>
 );
 
-const App = () => {
+
+const ListOfClasses = ({classes}) => {
   const renderItem = ({ item }) => (
     <Item item={item} />
   );
 
   return (
       <FlatList
-        data={DATA}
+        data={classes}
         renderItem={renderItem}
         keyExtractor={item => item.id}
       />
@@ -94,4 +75,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default App;
+export default ListOfClasses;

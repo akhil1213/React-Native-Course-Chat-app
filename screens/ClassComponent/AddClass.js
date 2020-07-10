@@ -14,16 +14,17 @@ export default function AddClass({navigation,route}) {
     const [date, setDate] = React.useState(Date.now());
     const {setClasses} = route.params
     const onTimeChange = (event, date) => {
-        console.log(date.getMinutes())
         setDate(date);
     };
     const addClassToList = () =>{
         let minutes = date.getMinutes();
         minutes = minutes%10 == minutes ? `0${minutes}` : minutes//append 0 to single digit minutes.
         let hour = date.getHours();
-        // hour = hour == 0 ? 12 : hour
-        // const meridean = hour >= 
-        const time = `${hour}:${minutes} pm`
+        console.log(hour)
+        const meridean = hour < 12 ? 'am' : 'pm'
+        hour = hour === 0 ? 12 : hour % 12//you have to use three equal signs since hour is of type 'any' and 0 is obviously of type int. with triple equal sign in js, javascript figures out the type of both objects when the objects are any. regular == works if ur comparing two integers or two strings so whenever the compiler knows the type. 
+        console.log(hour)
+        const time = `${hour}:${minutes} ${meridean}`
         const newClass = {
             className,
             profName,

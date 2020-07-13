@@ -10,7 +10,7 @@ var knex = require('knex')({
     connection: conString,
     searchPath: ['knex', 'public'],
 });
-console.log(knex)
+// console.log(knex)
 console.log(knex.select('profName', 'classname', 'time').from('Class'))
 
 

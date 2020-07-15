@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ClassScreen from './screens/ClassComponent/ClassScreen'
 import AddClass from './screens/ClassComponent/AddClass'
-
+import InitialPage from'./screens/UserAuth/initialpage'
 
 function HomeScreen() {
   return (
@@ -88,9 +88,16 @@ function MyTabs() {
 }
 
 export default function App() {
-  return (
+  return false ? (
+      <NavigationContainer>
+        <MyTabs />
+      </NavigationContainer>
+    
+  ) : 
+  (
     <NavigationContainer>
-      <MyTabs />
+      <InitialPage/>
     </NavigationContainer>
-  );
+  )
+  ;
 }

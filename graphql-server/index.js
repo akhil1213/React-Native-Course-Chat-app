@@ -1,6 +1,9 @@
 const { ApolloServer, gql } = require('apollo-server');
 const db = require("./db.js")
-const { signup } = require("./userauth")
+const { signup } = require("./userauth/signup")
+const { login } = require("./userauth/login")
+const { authorize } = require("./userauth/login")
+
 // A schema is a collection of type definitions (hence "typeDefs")
 // that together define the "shape" of queries that are executed against
 // your data.
@@ -11,6 +14,8 @@ const typeDefs = gql`
     password:String
     college:String
     id:String
+    token:String
+    password_digest:String
   }
   type Class {
     coursename: String
@@ -31,6 +36,8 @@ const typeDefs = gql`
   type Mutation{
     createClass(coursename:String,profname:String,time:String):String
     signupUser(username:String, password:String, college:String ): User!
+    loginUser(username:String, password:String): User!
+    authorize(token:String):User!
   }
 `;
 
@@ -54,6 +61,12 @@ const resolvers = {
       },
       signupUser:async(_, userObject ) => {
         return signup(userObject)
+      },
+      loginUser:async(_,userObject) =>{
+        return login(userObject)
+      },
+      authorize:async(_,{token}) =>{
+        return authorize(token)
       }
     }
 };

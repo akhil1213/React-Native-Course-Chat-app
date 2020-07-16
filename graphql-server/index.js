@@ -3,6 +3,9 @@ const db = require("./db.js")
 const { signup } = require("./userauth/signup")
 const { login } = require("./userauth/login")
 const { authorize } = require("./userauth/login")
+const express = require('express')
+const cors = require('cors')
+var { buildSchema } = require('graphql');
 
 // A schema is a collection of type definitions (hence "typeDefs")
 // that together define the "shape" of queries that are executed against
@@ -60,6 +63,8 @@ const resolvers = {
         return res
       },
       signupUser:async(_, userObject ) => {
+        console.log('signup beging triggered)')
+        console.log(userObject)
         return signup(userObject)
       },
       loginUser:async(_,userObject) =>{
@@ -70,8 +75,23 @@ const resolvers = {
       }
     }
 };
+// // const express = require('express');
+// const { graphqlHTTP } = require('express-graphql');
 
+// const app = express();
+
+// app.use(
+//   '/graphql',
+//   graphqlHTTP({
+//     schema: typeDefs,
+//     rootValue:resolvers,
+//     graphiql: true,
+//   }),
+// );
+
+// app.listen(4000);
 const server = new ApolloServer({ 
+  
   typeDefs,
    resolvers,
   context: ({ req }) => {

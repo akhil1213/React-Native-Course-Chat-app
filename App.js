@@ -6,7 +6,25 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import ClassScreen from './screens/ClassComponent/ClassScreen'
 import AddClass from './screens/ClassComponent/AddClass'
 import InitialPage from'./screens/UserAuth/initialpage'
-
+import { ApolloProvider,ApolloClient,InMemoryCache } from '@apollo/client'
+import {  gql } from '@apollo/client';
+console.log('hi')
+const client = new ApolloClient({
+  uri: 'http://localhost:4000',
+  cache: new InMemoryCache()
+});
+console.log(client)
+client
+  .query({
+    query: gql`
+      query{
+        classes{
+          coursename
+        }
+      }
+    `
+  })
+  .then(result => console.log(result)).catch((err)=>console.log(err));
 function HomeScreen() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -89,15 +107,22 @@ function MyTabs() {
 
 export default function App() {
   return false ? (
+ <ApolloProvider client={client}>
+
       <NavigationContainer>
         <MyTabs />
       </NavigationContainer>
-    
+    </ApolloProvider>
+
   ) : 
   (
-    <NavigationContainer>
-      <InitialPage/>
-    </NavigationContainer>
+    <ApolloProvider client={client}>
+
+        <NavigationContainer>
+        <InitialPage/>
+      </NavigationContainer>
+    </ApolloProvider>
+    
   )
   ;
 }

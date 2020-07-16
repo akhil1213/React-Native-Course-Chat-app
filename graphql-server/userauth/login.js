@@ -6,7 +6,8 @@ const crypto          = require('crypto')
 const login = async (userRequest) => {
     try{
         const user = await findUser(userRequest)
-        const passwordCorrect = await checkPassword(userRequest.password,user.password_digest)
+        if(!user)return new Error('No user found')
+        await checkPassword(userRequest.password,user.password_digest)
         const token = await createToken()
         await updateUserToken(token,user)
         delete user.password_digest
@@ -41,12 +42,15 @@ const createToken = () => {
     })
 }
 const findUser = (user) => {
-    return database.raw(
+    return new Promise((resolve,reject) =>{
+      database.raw(
         "SELECT * FROM users where username = ?",
         [user.username]
-    )
-    .then((data) => delete data.rows[0].password_digest)
-}
+      )
+      .then((data) => resolve(data.rows[0]))
+      .catch((err) => {console.log("ayeee"); reject(new Error('user not found'))})
+      } 
+    )}
 
 
 //AUTHORIZE LOGIC!
@@ -54,7 +58,7 @@ const findUserWithToken = async (token) => {
   return database.raw(
     "SELECT * FROM users where token = ?",
     [token]
-  ).then((data) => data.rows[0])
+  ).then((data) => delete data.rows[0].password_digest)
 }
 const authorize = async (token) => {
   const userData = await findUserWithToken(token)

@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { ApolloClient, InMemoryCache ,  gql, useMutation } from '@apollo/client';
+
 
 //Import all required component
 import {
@@ -14,6 +16,27 @@ import {
 } from 'react-native';
 import Loader from './loader';
 
+
+const client = new ApolloClient({
+  uri: 'http://localhost:4000/',
+  cache: new InMemoryCache()
+});
+
+const SIGN_UP = gql`
+  mutation signupUser($username: String!, $password:String!, $college:String!) {
+    signupUser(objects: [{
+      username: $username,
+      password:$password,
+      college:$college
+    }])
+    {
+      returning{
+        username
+        college
+      }
+    }
+  }
+`;
 const RegisterScreen = props => {
   let [userName, setUserName] = useState('');
   let [password, setPassword] = useState('');
@@ -22,7 +45,13 @@ const RegisterScreen = props => {
   let [errortext, setErrortext] = useState('');
   let [isRegistraionSuccess, setIsRegistraionSuccess] = useState(false);
 
-  const handleSubmitButton = () => {
+  //changing input focus's while user is typing in signup/login info
+  let [passwordInput,setPasswordInput] = useState(null)
+  let [collegeInput,setCollegeInput] = useState(null)
+
+  const [signupUser, { data }] = useMutation(SIGN_UP);
+
+  const handleSubmitButton = async () => {
     setErrortext('');
     if (!userName) {
       alert('Please fill Name');
@@ -32,12 +61,25 @@ const RegisterScreen = props => {
       alert('Please fill Password');
       return;
     }
+    if (password.length < 8){
+      alert('Password must be > 8')
+      return;
+    }
     if (!college) {
       alert('Please enter College name');
       return;
     }
-    //Show Loader
     setLoading(true);
+    try{
+      signupUser({ variables: { username:userName,password:password,college:college } })
+    }catch(err){
+      console.log(err)
+    }
+    
+    console.log(data)
+    console.log(loadingServer)
+    console.log(error)
+    setLoading(false);
   };
   if (isRegistraionSuccess) {
     return (
@@ -86,9 +128,7 @@ const RegisterScreen = props => {
               placeholderTextColor="#F6F6F7"
               autoCapitalize="sentences"
               returnKeyType="next"
-              onSubmitEditing={() =>
-                this._emailinput && this._emailinput.focus()
-              }
+              onSubmitEditing={() => { passwordInput.focus(); }}
               blurOnSubmit={false}
             />
           </View>
@@ -99,14 +139,12 @@ const RegisterScreen = props => {
               underlineColorAndroid="#F6F6F7"
               placeholder="Enter password"
               placeholderTextColor="#F6F6F7"
-              keyboardType="password"
+              secureTextEntry={true}
               autoCompleteType="off"
-              ref={ref => {
-                this._emailinput = ref;
-              }}
               returnKeyType="next"
-              onSubmitEditing={() => this._ageinput && this._ageinput.focus()}
               blurOnSubmit={false}
+              onSubmitEditing={() => { collegeInput.focus(); }}
+              ref={(input) => { setPasswordInput(input); }}
             />
           </View>
           <View style={styles.SectionStyle}>
@@ -116,14 +154,8 @@ const RegisterScreen = props => {
               underlineColorAndroid="#F6F6F7"
               placeholder="Enter College"
               placeholderTextColor="#F6F6F7"
-              keyboardType="numeric"
-              ref={ref => {
-                this._ageinput = ref;
-              }}
-              onSubmitEditing={() =>
-                this._addressinput && this._addressinput.focus()
-              }
               blurOnSubmit={false}
+              ref={(input) => { setCollegeInput(input); }}//this ref function is called upon rendering
             />
           </View>
           {errortext != '' ? (

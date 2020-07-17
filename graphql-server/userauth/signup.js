@@ -11,6 +11,7 @@ const signup = async (user) => {
         token = await createToken()
         user.token = token
         user = await createUser(user)
+        if(!user) return new Error('username taken')
         return user
     }catch(err){
         return err

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ApolloClient, InMemoryCache ,  gql, useMutation } from '@apollo/client';
+// import { ApolloClient, InMemoryCache ,  gql, useMutation } from '@apollo/client';
 
 
 //Import all required component
@@ -14,26 +14,27 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import Loader from './loader';
+import Loader from './loader'
+
+import { gql } from 'apollo-boost';
+import { Mutation } from 'react-apollo';
 
 
-const client = new ApolloClient({
-  uri: 'http://localhost:4000/',
-  cache: new InMemoryCache()
-});
+
+
 
 const SIGN_UP = gql`
   mutation signupUser($username: String!, $password:String!, $college:String!) {
-    signupUser(objects: [{
+    signupUser(
       username: $username,
       password:$password,
       college:$college
-    }])
+    )
     {
-      returning{
+      
         username
         college
-      }
+      
     }
   }
 `;
@@ -44,14 +45,12 @@ const RegisterScreen = props => {
   let [loading, setLoading] = useState(false);
   let [errortext, setErrortext] = useState('');
   let [isRegistraionSuccess, setIsRegistraionSuccess] = useState(false);
-
   //changing input focus's while user is typing in signup/login info
   let [passwordInput,setPasswordInput] = useState(null)
   let [collegeInput,setCollegeInput] = useState(null)
 
-  const [signupUser, { data }] = useMutation(SIGN_UP);
 
-  const handleSubmitButton = async () => {
+  const handleSubmitButton = async (signupUser) => {
     setErrortext('');
     if (!userName) {
       alert('Please fill Name');
@@ -69,17 +68,11 @@ const RegisterScreen = props => {
       alert('Please enter College name');
       return;
     }
-    setLoading(true);
     try{
       signupUser({ variables: { username:userName,password:password,college:college } })
     }catch(err){
       console.log(err)
     }
-    
-    console.log(data)
-    console.log(loadingServer)
-    console.log(error)
-    setLoading(false);
   };
   if (isRegistraionSuccess) {
     return (
@@ -105,7 +98,6 @@ const RegisterScreen = props => {
   }
   return (
     <View style={{ flex: 1, backgroundColor: '#307ecc' }}>
-      <Loader loading={loading} />
       <ScrollView keyboardShouldPersistTaps="handled">
         <View style={{ alignItems: 'center' }}>
           <Image
@@ -161,12 +153,25 @@ const RegisterScreen = props => {
           {errortext != '' ? (
             <Text style={styles.errorTextStyle}> {errortext} </Text>
           ) : null}
-          <TouchableOpacity
+          <Mutation mutation={SIGN_UP} variables={{ userName,password,college }}>
+            {(signup, { data, loading, error }) => 
+              <View>
+                  <Loader loading={loading}/>
+                  <TouchableOpacity
+                    style={styles.buttonStyle}
+                    activeOpacity={0.5}
+                    onPress={()=>handleSubmitButton(signup)}>
+                    <Text style={styles.buttonTextStyle}>REGISTER</Text>
+                  </TouchableOpacity>
+              </View>
+              }
+          </Mutation>
+          {/* <TouchableOpacity
             style={styles.buttonStyle}
             activeOpacity={0.5}
             onPress={handleSubmitButton}>
             <Text style={styles.buttonTextStyle}>REGISTER</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </KeyboardAvoidingView>
       </ScrollView>
     </View>

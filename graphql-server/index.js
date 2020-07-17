@@ -1,4 +1,4 @@
-const { ApolloServer, gql } = require('apollo-server');
+const { ApolloServer, gql } = require('apollo-server-express');
 const db = require("./db.js")
 const { signup } = require("./userauth/signup")
 const { login } = require("./userauth/login")
@@ -68,6 +68,7 @@ const resolvers = {
         return signup(userObject)
       },
       loginUser:async(_,userObject) =>{
+        console.log(userObject)
         return login(userObject)
       },
       authorize:async(_,{token}) =>{
@@ -75,37 +76,13 @@ const resolvers = {
       }
     }
 };
-// // const express = require('express');
-// const { graphqlHTTP } = require('express-graphql');
-
-// const app = express();
-
-// app.use(
-//   '/graphql',
-//   graphqlHTTP({
-//     schema: typeDefs,
-//     rootValue:resolvers,
-//     graphiql: true,
-//   }),
-// );
-
-// app.listen(4000);
-const server = new ApolloServer({ 
-  
-  typeDefs,
-   resolvers,
-  context: ({ req }) => {
-    // get the authorization from the request headers
-    // return a context obj with our token. if any!
-    const auth = req.headers.authorization || '';
-    return {
-      auth
-    };
-  } });
-
-// The `listen` method launches a web server.
-server.listen().then(({ url }) => {
-    console.log(`🚀  Server ready at ${url}`);
-});
+const server = new ApolloServer({ typeDefs, resolvers });
+ 
+const app = express();
+server.applyMiddleware({ app });
+ 
+app.listen({ port: 4000 }, () =>
+  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
+);
 
 

@@ -14,14 +14,32 @@ import {
 } from 'react-native';
 // import AsyncStorage from '@react-native-community/async-storage';
 import Loader from './loader';
+import { gql } from 'apollo-boost';
+import { Mutation } from 'react-apollo';
+
+
+
+
+
+const LOG_IN = gql`
+  mutation loginUser($username: String!, $password:String!) {
+    loginUser(
+      username: $username,
+      password:$password
+    )
+    {
+      college
+    }
+  }
+`;
+
 
 const LoginScreen = props => {
   let [userName, setuserName] = useState('');
   let [userPassword, setUserPassword] = useState('');
-  let [loading, setLoading] = useState(false);
   let [errortext, setErrortext] = useState('');
-
-  const handleSubmitPress = () => {
+  let [passwordnput,setPasswordInput] = useState(null)
+  const handleSubmitPress = (login) => {
     setErrortext('');
     if (!userName) {
       alert('Please fill Email');
@@ -31,21 +49,17 @@ const LoginScreen = props => {
       alert('Please fill Password');
       return;
     }
-    setLoading(true);
-    // var dataToSend = { user_email: userName, user_password: userPassword };
-    // var formBody = [];
-    // for (var key in dataToSend) {
-    //   var encodedKey = encodeURIComponent(key);
-    //   var encodedValue = encodeURIComponent(dataToSend[key]);
-    //   formBody.push(encodedKey + '=' + encodedValue);
-    // }
-    // formBody = formBody.join('&');
+    try{
+      login({ variables: { username:userName,password:userPassword } })
+    }catch(err){
+      console.log(err)
+    }
+    
 
   };
 
   return (
     <View style={styles.mainBody}>
-      <Loader loading={loading} />
       <ScrollView keyboardShouldPersistTaps="handled">
         <View style={{ marginTop: 100 }}>
           <KeyboardAvoidingView enabled>
@@ -69,12 +83,9 @@ const LoginScreen = props => {
                 placeholderTextColor="#F6F6F7"
                 autoCapitalize="none"
                 keyboardType="email-address"
-                ref={ref => {
-                  this._emailinput = ref;
-                }}
                 returnKeyType="next"
                 onSubmitEditing={() =>
-                  this._passwordinput && this._passwordinput.focus()
+                  passwordinput.focus()
                 }
                 blurOnSubmit={false}
               />
@@ -88,7 +99,7 @@ const LoginScreen = props => {
                 placeholderTextColor="#F6F6F7"
                 keyboardType="default"
                 ref={ref => {
-                  this._passwordinput = ref;
+                  setPasswordInput(ref)
                 }}
                 onSubmitEditing={Keyboard.dismiss}
                 blurOnSubmit={false}
@@ -98,15 +109,23 @@ const LoginScreen = props => {
             {errortext != '' ? (
               <Text style={styles.errorTextStyle}> {errortext} </Text>
             ) : null}
-            <TouchableOpacity
-              style={styles.buttonStyle}
-              activeOpacity={0.5}
-              onPress={handleSubmitPress}>
-              <Text style={styles.buttonTextStyle}>LOGIN</Text>
-            </TouchableOpacity>
+            <Mutation mutation={LOG_IN} variables={{ userName,userPassword }}>
+              {(login, { data, loading, error }) =>
+              <View>
+                {data && <Text>{data.loginUser.college}</Text>}
+                <Loader loading={false||loading}/>
+                <TouchableOpacity
+                  style={styles.buttonStyle}
+                  activeOpacity={0.5}
+                  onPress={()=>handleSubmitPress(login)}>
+                  <Text style={styles.buttonTextStyle}>LOGIN</Text>
+                </TouchableOpacity>
+              </View>
+              }
+            </Mutation>
             <Text
               style={styles.registerTextStyle}
-              onPress={() => props.navigation.navigate('RegisterScreen')}>
+              onPress={() => props.navigation.navigate('signup')}>
               New Here ? Register
             </Text>
           </KeyboardAvoidingView>

@@ -6,25 +6,16 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import ClassScreen from './screens/ClassComponent/ClassScreen'
 import AddClass from './screens/ClassComponent/AddClass'
 import InitialPage from'./screens/UserAuth/initialpage'
-import { ApolloProvider,ApolloClient,InMemoryCache } from '@apollo/client'
+// import { ApolloConsumer,ApolloProvider,ApolloClient,InMemoryCache } from '@apollo/client'
 import {  gql } from '@apollo/client';
+import ApolloClient from 'apollo-boost';
+import { ApolloProvider } from 'react-apollo';
+
 console.log('hi')
 const client = new ApolloClient({
-  uri: 'http://localhost:4000',
-  cache: new InMemoryCache()
+  uri: 'http://localhost:4000/graphql',
+  // cache: new InMemoryCache(),
 });
-console.log(client)
-client
-  .query({
-    query: gql`
-      query{
-        classes{
-          coursename
-        }
-      }
-    `
-  })
-  .then(result => console.log(result)).catch((err)=>console.log(err));
 function HomeScreen() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -117,7 +108,6 @@ export default function App() {
   ) : 
   (
     <ApolloProvider client={client}>
-
         <NavigationContainer>
         <InitialPage/>
       </NavigationContainer>

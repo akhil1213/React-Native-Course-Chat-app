@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Text, View } from 'react-native';
+import { useState, useEffect } from 'react'
+import { Text, View , Button} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -7,15 +8,55 @@ import ClassScreen from './screens/ClassComponent/ClassScreen'
 import AddClass from './screens/ClassComponent/AddClass'
 import InitialPage from'./screens/UserAuth/initialpage'
 // import { ApolloConsumer,ApolloProvider,ApolloClient,InMemoryCache } from '@apollo/client'
-import {  gql } from '@apollo/client';
-import ApolloClient from 'apollo-boost';
-import { ApolloProvider } from 'react-apollo';
+// import {  gql } from '@apollo/client';
+// import ApolloClient from 'apollo-boost';
+// import { InMemoryCache } from 'apollo-cache-inmemory';
+import { ApolloProvider} from "@apollo/react-hooks";
 
-console.log('hi')
-const client = new ApolloClient({
-  uri: 'http://localhost:4000/graphql',
-  // cache: new InMemoryCache(),
+import { ApolloClient } from "apollo-client";
+import { InMemoryCache } from "apollo-cache-inmemory";
+import { HttpLink } from "apollo-link-http";
+import { useApolloClient, useMutation } from "@apollo/react-hooks";
+// import gql from "graphql-tag";
+import { gql, useQuery } from '@apollo/client';
+import { Query } from 'react-apollo';
+
+const cache = new InMemoryCache();
+const link = new HttpLink({
+  uri: "http://localhost:4000/graphql"
 });
+
+const client = new ApolloClient({
+  cache,
+  link
+});
+
+// const cache = new InMemoryCache()
+// const client = new ApolloClient({
+//   cache,
+//   uri: 'http://localhost:4000/graphql',
+//   typeDefs,
+//   resolvers
+// });
+// export const typeDefs = gql`
+
+//   extend type Mutation {
+//     loginUser(username:String!, password:String!): String!
+//   }
+// `;
+// export const resolvers = {};
+// cache.writeData({
+//   data: {
+//     college:''
+//   }
+// });
+const college = gql`
+  query IsUserLoggedIn {
+    college 
+  }
+`;
+
+
 function HomeScreen() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -95,22 +136,38 @@ function MyTabs() {
     </Tab.Navigator>
   );
 }
-
+function mediator(){
+  
+}
 export default function App() {
-  return false ? (
- <ApolloProvider client={client}>
-
-      <NavigationContainer>
-        <MyTabs />
-      </NavigationContainer>
-    </ApolloProvider>
-
-  ) : 
-  (
+  // const { data, loading, error } = useQuery(college);
+  // if (loading) return 'Loading...';
+  // if (error) return `Error! ${error.message}`;
+  useEffect(() => {
+    // Update the document title using the browser API
+    // console.log(data)
+    console.log('update!')
+  });
+  return(
     <ApolloProvider client={client}>
-        <NavigationContainer>
-        <InitialPage/>
-      </NavigationContainer>
+      <Query query={college}>
+                {({ loading, error, data }) => {
+                    if(data) 
+                    return(
+                      <ApolloProvider client={client}>
+                           <NavigationContainer>
+                             <MyTabs />
+                           </NavigationContainer>
+                         </ApolloProvider>
+                     
+                       )
+                    return ( 
+                      <NavigationContainer>
+                          <InitialPage/>
+                      </NavigationContainer>
+                    )
+                    }}
+                </Query>
     </ApolloProvider>
     
   )

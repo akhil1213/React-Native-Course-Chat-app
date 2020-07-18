@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 //Import all required component
 import {
@@ -14,9 +14,8 @@ import {
 } from 'react-native';
 // import AsyncStorage from '@react-native-community/async-storage';
 import Loader from './loader';
-import { gql } from 'apollo-boost';
-import { Mutation } from 'react-apollo';
-
+import gql from "graphql-tag";
+import { useApolloClient, useMutation } from "@apollo/react-hooks";
 
 
 
@@ -34,11 +33,20 @@ const LOG_IN = gql`
 `;
 
 
-const LoginScreen = props => {
+const LoginScreen = ({route}) => {
+  console.log(route)
   let [userName, setuserName] = useState('');
   let [userPassword, setUserPassword] = useState('');
   let [errortext, setErrortext] = useState('');
   let [passwordnput,setPasswordInput] = useState(null)
+  const client = useApolloClient();
+  const [login, { loading, error,data }] = useMutation(LOG_IN, {
+    onCompleted(data) {
+      console.log(data.loginUser.college)
+      client.writeData({ data: { college:data.loginUser.college } });
+    }
+  });
+
   const handleSubmitPress = (login) => {
     setErrortext('');
     if (!userName) {
@@ -49,15 +57,19 @@ const LoginScreen = props => {
       alert('Please fill Password');
       return;
     }
+    console.log(login)
     try{
       login({ variables: { username:userName,password:userPassword } })
+      console.log(res)
     }catch(err){
       console.log(err)
     }
-    
-
   };
-
+  useEffect(() => {
+    // Update the document title using the browser API
+    // console.log(data)
+    console.log('updatssse!')
+  });
   return (
     <View style={styles.mainBody}>
       <ScrollView keyboardShouldPersistTaps="handled">
@@ -109,20 +121,12 @@ const LoginScreen = props => {
             {errortext != '' ? (
               <Text style={styles.errorTextStyle}> {errortext} </Text>
             ) : null}
-            <Mutation mutation={LOG_IN} variables={{ userName,userPassword }}>
-              {(login, { data, loading, error }) =>
-              <View>
-                {data && <Text>{data.loginUser.college}</Text>}
-                <Loader loading={false||loading}/>
                 <TouchableOpacity
                   style={styles.buttonStyle}
                   activeOpacity={0.5}
                   onPress={()=>handleSubmitPress(login)}>
                   <Text style={styles.buttonTextStyle}>LOGIN</Text>
                 </TouchableOpacity>
-              </View>
-              }
-            </Mutation>
             <Text
               style={styles.registerTextStyle}
               onPress={() => props.navigation.navigate('signup')}>

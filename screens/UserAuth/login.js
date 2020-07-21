@@ -34,7 +34,6 @@ const LOG_IN = gql`
 
 
 const LoginScreen = ({route}) => {
-  console.log(route)
   let [userName, setuserName] = useState('');
   let [userPassword, setUserPassword] = useState('');
   let [errortext, setErrortext] = useState('');
@@ -42,33 +41,30 @@ const LoginScreen = ({route}) => {
   const client = useApolloClient();
   const [login, { loading, error,data }] = useMutation(LOG_IN, {
     onCompleted(data) {
-      console.log(data.loginUser.college)
-      client.writeData({ data: { college:data.loginUser.college } });
+      client.writeData({ data: { college:data.loginUser.college,loggedIn:true } });
     }
   });
-
+  
   const handleSubmitPress = (login) => {
     setErrortext('');
     if (!userName) {
-      alert('Please fill Email');
+      setErrortext('Please fill email');
       return;
     }
     if (!userPassword) {
-      alert('Please fill Password');
+      setErrortext('Please fill Password');
       return;
     }
-    console.log(login)
     try{
       login({ variables: { username:userName,password:userPassword } })
-      console.log(res)
     }catch(err){
+      console.log('heyyyy')
       console.log(err)
     }
   };
   useEffect(() => {
     // Update the document title using the browser API
     // console.log(data)
-    console.log('updatssse!')
   });
   return (
     <View style={styles.mainBody}>
@@ -118,8 +114,11 @@ const LoginScreen = ({route}) => {
                 secureTextEntry={true}
               />
             </View>
+            {error && error.graphQLErrors.map(({ message }, i) => (
+              <Text style={styles.errorTextStyle} key={i}>{message}</Text>
+            ))}
             {errortext != '' ? (
-              <Text style={styles.errorTextStyle}> {errortext} </Text>
+              <Text style={styles.errorTextStyle}> {errortext } </Text>
             ) : null}
                 <TouchableOpacity
                   style={styles.buttonStyle}

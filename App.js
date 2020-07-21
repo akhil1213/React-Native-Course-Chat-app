@@ -20,7 +20,8 @@ import { useApolloClient, useMutation } from "@apollo/react-hooks";
 // import gql from "graphql-tag";
 import { gql, useQuery } from '@apollo/client';
 import { Query } from 'react-apollo';
-
+import HomeScreen from './screens/HomeComponent/home'
+import SettingsScreen from './screens/SettingsComponent/settings'
 const cache = new InMemoryCache();
 const link = new HttpLink({
   uri: "http://localhost:4000/graphql"
@@ -50,28 +51,13 @@ const client = new ApolloClient({
 //     college:''
 //   }
 // });
-const college = gql`
+const loggedIn = gql`
   query IsUserLoggedIn {
-    college 
+    loggedIn 
   }
 `;
 
 
-function HomeScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Home!</Text>
-    </View>
-  );
-}
-
-function SettingsScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Settings!</Text>
-    </View>
-  );
-}
 function MessageScreen() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -136,38 +122,32 @@ function MyTabs() {
     </Tab.Navigator>
   );
 }
-function mediator(){
-  
-}
 export default function App() {
   // const { data, loading, error } = useQuery(college);
   // if (loading) return 'Loading...';
   // if (error) return `Error! ${error.message}`;
   useEffect(() => {
-    // Update the document title using the browser API
-    // console.log(data)
-    console.log('update!')
   });
   return(
     <ApolloProvider client={client}>
-      <Query query={college}>
-                {({ loading, error, data }) => {
-                    if(data) 
-                    return(
-                      <ApolloProvider client={client}>
-                           <NavigationContainer>
-                             <MyTabs />
-                           </NavigationContainer>
-                         </ApolloProvider>
-                     
-                       )
-                    return ( 
-                      <NavigationContainer>
-                          <InitialPage/>
-                      </NavigationContainer>
+      <Query query={loggedIn}>
+          {({ loading, error, data }) => {
+              if(data && data.loggedIn){ //undefined.loggedIn throws error so check if data is not undefined first.
+                  return(
+                    <ApolloProvider client={client}>
+                          <NavigationContainer>
+                            <MyTabs />
+                          </NavigationContainer>
+                        </ApolloProvider>
                     )
-                    }}
-                </Query>
+              }
+              return ( 
+                <NavigationContainer>
+                    <InitialPage/>
+                </NavigationContainer>
+              )
+              }}
+      </Query>
     </ApolloProvider>
     
   )

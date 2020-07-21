@@ -5,6 +5,7 @@ import login from './login'
 import { gql } from 'apollo-boost';
 import { Query } from 'react-apollo';
 import { createStackNavigator } from '@react-navigation/stack';
+import { useApolloClient, useMutation } from "@apollo/react-hooks";
 
 
 const GET_CLASSES = gql`
@@ -19,7 +20,7 @@ const StackNavigator = createStackNavigator();
 function HomeScreen({navigation}){
     return (
         <View>
-            <Query query={GET_CLASSES}>
+            {/* <Query query={GET_CLASSES}>
                 {({ loading, error, data }) => {
                     if (loading) return <Text>Loading...</Text>;
                     if (error) return <Text>error</Text>;
@@ -29,7 +30,7 @@ function HomeScreen({navigation}){
                         <Button title={data.classes.coursename} />
                     )
                     }}
-                </Query>
+                </Query> */}
             <Button title="signup"onPress={()=>navigation.navigate('signup')}/>
             <Button title="login" onPress={()=>navigation.navigate('login')}/>
         </View>

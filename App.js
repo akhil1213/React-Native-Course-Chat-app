@@ -24,7 +24,7 @@ import HomeScreen from './screens/HomeComponent/home'
 import SettingsScreen from './screens/SettingsComponent/settings'
 const cache = new InMemoryCache();
 const link = new HttpLink({
-  uri: "http://localhost:4000/graphql"
+  uri: "http://192.168.2.62:4000/graphql"
 });
 
 const client = new ApolloClient({

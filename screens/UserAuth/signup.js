@@ -83,7 +83,7 @@ const RegisterScreen = props => {
           justifyContent: 'center',
         }}>
         <Image
-          source={require('../Images/collegePic.png')}
+          source={require('../../assets/Images/collegePic.png')}
           style={{ height: 150, resizeMode: 'contain', alignSelf: 'center' }}
         />
         <Text style={styles.successTextStyle}>Registration Successful.</Text>
@@ -101,7 +101,7 @@ const RegisterScreen = props => {
       <ScrollView keyboardShouldPersistTaps="handled">
         <View style={{ alignItems: 'center' }}>
           <Image
-            source={require('../Images/collegePic.png')}
+            source={require('../../assets/Images/collegePic.png')}
             style={{
               width: '50%',
               height: 100,
@@ -156,7 +156,6 @@ const RegisterScreen = props => {
           <Mutation mutation={SIGN_UP} variables={{ userName,password,college }}>
             {(signup, { data, loading, error }) => 
               <View>
-                  <Loader loading={loading}/>
                   <TouchableOpacity
                     style={styles.buttonStyle}
                     activeOpacity={0.5}

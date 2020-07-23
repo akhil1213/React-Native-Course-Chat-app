@@ -73,7 +73,7 @@ const LoginScreen = ({route}) => {
           <KeyboardAvoidingView enabled>
             <View style={{ alignItems: 'center' }}>
               <Image
-                source={require('../Images/collegePic.png')}
+                source={require('../../assets/Images/collegePic.png')}
                 style={{
                   width: '50%',
                   height: 100,

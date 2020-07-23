@@ -81,8 +81,8 @@ const server = new ApolloServer({ typeDefs, resolvers });
 const app = express();
 server.applyMiddleware({ app });
  
-app.listen({ port: 4000 }, () =>
-  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
+app.listen(4000, '192.168.2.62', () =>
+  console.log(`🚀 Server ready at http://192.168.2.62:4000${server.graphqlPath}`)
 );
 
 

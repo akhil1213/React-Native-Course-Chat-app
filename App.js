@@ -127,6 +127,7 @@ export default function App() {
   // if (loading) return 'Loading...';
   // if (error) return `Error! ${error.message}`;
   useEffect(() => {
+    console.log('reloaded')
   });
   return(
     <ApolloProvider client={client}>
@@ -149,7 +150,6 @@ export default function App() {
               }}
       </Query>
     </ApolloProvider>
-    
   )
   ;
 }

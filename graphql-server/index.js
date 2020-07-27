@@ -2,7 +2,8 @@ const { ApolloServer, gql } = require('apollo-server-express');
 const db = require("./db.js")
 const { signup } = require("./userauth/signup")
 const { login } = require("./userauth/login")
-const { authorize } = require("./userauth/login")
+// const { authorize } = require("./userauth/login")
+const auth = require("./userauth/middleware/auth")
 const express = require('express')
 const cors = require('cors')
 var { buildSchema } = require('graphql');
@@ -72,7 +73,8 @@ const resolvers = {
         return login(userObject)
       },
       authorize:async(_,{token}) =>{
-        return authorize(token)
+        console.log(auth)
+        return auth(token)
       }
     }
 };

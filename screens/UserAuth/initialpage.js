@@ -80,13 +80,13 @@ const styles = StyleSheet.create({
         textAlign:'center'
     },
     description:{
-        color:'#00aaff',
+        color:'#ebe834',
         fontWeight:'900',
         fontSize:20,
         marginTop:'15px'
     },
     name:{
-        color:'#1cb3ff',
+        color:'#ebe834',
         fontWeight:'900',
         fontSize:30
     },

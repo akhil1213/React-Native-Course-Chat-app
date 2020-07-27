@@ -33,7 +33,7 @@ const LOG_IN = gql`
 `;
 
 
-const LoginScreen = ({route}) => {
+const LoginScreen = ({route,navigation}) => {
   let [userName, setuserName] = useState('');
   let [userPassword, setUserPassword] = useState('');
   let [errortext, setErrortext] = useState('');
@@ -128,7 +128,7 @@ const LoginScreen = ({route}) => {
                 </TouchableOpacity>
             <Text
               style={styles.registerTextStyle}
-              onPress={() => props.navigation.navigate('signup')}>
+              onPress={() => navigation.navigate('signup')}>
               New Here ? Register
             </Text>
           </KeyboardAvoidingView>

@@ -19,7 +19,15 @@ import { useApolloClient, useMutation } from "@apollo/react-hooks";
 
 
 
-
+const loginQuery = gql`
+  query MyTodoAppQuery {
+    todos {
+      id
+      text
+      completed
+    }
+  }
+`;
 const LOG_IN = gql`
   mutation loginUser($username: String!, $password:String!) {
     loginUser(
@@ -28,6 +36,7 @@ const LOG_IN = gql`
     )
     {
       college
+      token
     }
   }
 `;
@@ -41,7 +50,13 @@ const LoginScreen = ({route,navigation}) => {
   const client = useApolloClient();
   const [login, { loading, error,data }] = useMutation(LOG_IN, {
     onCompleted(data) {
-      client.writeData({ data: { college:data.loginUser.college,loggedIn:true } });
+      // client.writeQuery({
+      //   loginQuery,
+      //   data: {
+      //     userInfo: { college:data.loginUser.college,token:data.loginUser.token },
+      //   },
+      // });
+      client.writeData({ data: {userInfo:{ college:data.loginUser.college,loggedIn:true,token:data.loginUser.token,__typename: 'User'}} });
     }
   });
   
@@ -114,9 +129,9 @@ const LoginScreen = ({route,navigation}) => {
                 secureTextEntry={true}
               />
             </View>
-            {error && error.graphQLErrors.map(({ message }, i) => (
+            {/* {error && error.graphQLErrors.map(({ message }, i) => (
               <Text style={styles.errorTextStyle} key={i}>{message}</Text>
-            ))}
+            ))} */}
             {errortext != '' ? (
               <Text style={styles.errorTextStyle}> {errortext } </Text>
             ) : null}

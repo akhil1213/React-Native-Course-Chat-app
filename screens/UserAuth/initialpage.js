@@ -1,11 +1,11 @@
-import  React from 'react';
+import  React, {useEffect} from 'react';
 import { StyleSheet, Text, View,TouchableHighlight, TextInput,Button, Image, ImageBackground} from 'react-native';
 import signup from './signup'
 import login from './login'
 import { gql } from 'apollo-boost';
 import { Query } from 'react-apollo';
 import { createStackNavigator } from '@react-navigation/stack';
-import { useApolloClient, useMutation } from "@apollo/react-hooks";
+import { useApolloClient, useMutation, useQuery } from "@apollo/react-hooks";
 
 
 
@@ -19,36 +19,26 @@ const GET_CLASSES = gql`
 const StackNavigator = createStackNavigator();
 
 function HomeScreen({navigation}){
-    
+    // const { loading, error,data } = useQuery(GET_CLASSES);
+    useEffect(()=>{
+    })
     return (
     <ImageBackground source={require('../../assets/Images/initialpageBackground.jpg')} style={styles.backgroundImage}>
         <View style={styles.container}>
-            
-            {/* <Query query={GET_CLASSES}>
-                {({ loading, error, data }) => {
-                    if (loading) return <Text>Loading...</Text>;
-                    if (error) return <Text>error</Text>;
-                    console.log(data)
-                    console.log(error)
-                    return (
-                        <Button title={data.classes.coursename} />
-                    )
-                    }}
-                </Query> */}
-                <View style={styles.descriptionContainer}>
-                    <Text style={styles.name}>CourseChat</Text>
-                    <Text style={styles.description}>
-                        Chat with your fellow classmates virtually and make study groups!
-                    </Text>
-                </View>
-                <View style={styles.buttons}>
-                    <TouchableHighlight underlayColor="#f5e942" style={styles.button} title="signup"onPress={()=>navigation.navigate('signup')}>
-                        <Text style={styles.buttonText}>Sign up</Text>
-                    </TouchableHighlight>
-                    <TouchableHighlight underlayColor="#f5e942" style={styles.button} title="login" onPress={()=>navigation.navigate('login')}>
-                        <Text style={styles.buttonText}>Log in</Text>
-                    </TouchableHighlight>
-                </View>
+            <View style={styles.descriptionContainer}>
+                <Text style={styles.name}>CourseChat</Text>
+                <Text style={styles.description}>
+                    Chat with your fellow classmates virtually and make study groups!
+                </Text>
+            </View>
+            <View style={styles.buttons}>
+                <TouchableHighlight underlayColor="#f5e942" style={styles.button} title="signup"onPress={()=>navigation.navigate('signup')}>
+                    <Text style={styles.buttonText}>Sign up</Text>
+                </TouchableHighlight>
+                <TouchableHighlight underlayColor="#f5e942" style={styles.button} title="login" onPress={()=>navigation.navigate('login')}>
+                    <Text style={styles.buttonText}>Log in</Text>
+                </TouchableHighlight>
+            </View>
         </View>
     </ImageBackground>
     )

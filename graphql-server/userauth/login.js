@@ -68,7 +68,7 @@ const findUser = (user) => {
         [user.username]
       )
       .then((data) => resolve(data.rows[0]))
-      .catch((err) => {console.log("ayeee"); reject(new Error('user not found'))})
+      .catch((err) => {reject(new Error('user not found'))})
       } 
     )}
 

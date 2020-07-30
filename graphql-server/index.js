@@ -81,10 +81,12 @@ const resolvers = {
 const server = new ApolloServer({ typeDefs, resolvers });
  
 const app = express();
+// app.use(cors())
 server.applyMiddleware({ app });
  
-app.listen(4000, '192.168.2.62', () =>
+app.listen(4000, () =>
   console.log(`🚀 Server ready at http://192.168.2.62:4000${server.graphqlPath}`)
 );
+
 
 

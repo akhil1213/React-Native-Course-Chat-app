@@ -4,7 +4,7 @@ module.exports = {
 
   development: {
     client: 'pg',
-    connection: process.env.DB_URL
+    connection: "postgres://ukegfydr:80YWjjZbHEOE78IKWDLUrnA5WP7alCvu@ruby.db.elephantsql.com:5432/ukegfydr"
   ,migrations: {
     directory: './data/migrations',
   },

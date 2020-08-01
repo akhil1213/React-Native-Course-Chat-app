@@ -46,7 +46,7 @@ const LoginScreen = ({route,navigation}) => {
   let [userName, setuserName] = useState('');
   let [userPassword, setUserPassword] = useState('');
   let [errortext, setErrortext] = useState('');
-  let [passwordnput,setPasswordInput] = useState(null)
+  let [passwordinput,setPasswordInput] = useState(null)
   const client = useApolloClient();
   const [login, { loading, error,data }] = useMutation(LOG_IN, {
     onCompleted(data) {
@@ -129,9 +129,9 @@ const LoginScreen = ({route,navigation}) => {
                 secureTextEntry={true}
               />
             </View>
-            {/* {error && error.graphQLErrors.map(({ message }, i) => (
+            {error && error.graphQLErrors.map(({ message }, i) => (
               <Text style={styles.errorTextStyle} key={i}>{message}</Text>
-            ))} */}
+            ))}
             {errortext != '' ? (
               <Text style={styles.errorTextStyle}> {errortext } </Text>
             ) : null}

@@ -17,7 +17,13 @@ export default function HomeScreen({navigation}) {
                 {({ loading, error, data }) => {
                     if(data){
                         return (
-                            <View style={styles.container}><Text>{data.userInfo.college}</Text></View>
+                            <View style={styles.descriptionContainer}>
+                                <Text style={styles.name}>College:</Text>
+                                <Text style={styles.name}>{data.userInfo.college}</Text>
+                                <Text style={styles.description}>
+                                    More Additions later!
+                                </Text>
+                            </View>
                         );
                     }else{
                         return <View><Text>Akhil</Text></View>
@@ -30,5 +36,20 @@ export default function HomeScreen({navigation}) {
 const styles = StyleSheet.create({
     container: {
         paddingTop: Constants.statusBarHeight,
+    },
+    descriptionContainer:{
+        marginTop:'40px',
+        textAlign:'center'
+    },
+    description:{
+        color:'#2a5d96',
+        fontWeight:'900',
+        fontSize:20,
+        marginTop:'15px'
+    },
+    name:{
+        color:'#2a5d96',
+        fontWeight:'900',
+        fontSize:30
     },
 });

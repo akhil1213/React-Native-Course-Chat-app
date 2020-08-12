@@ -19,15 +19,6 @@ import { useApolloClient, useMutation } from "@apollo/react-hooks";
 
 
 
-const loginQuery = gql`
-  query MyTodoAppQuery {
-    todos {
-      id
-      text
-      completed
-    }
-  }
-`;
 const LOG_IN = gql`
   mutation loginUser($username: String!, $password:String!) {
     loginUser(
@@ -37,6 +28,7 @@ const LOG_IN = gql`
     {
       college
       token
+      username
     }
   }
 `;
@@ -50,13 +42,8 @@ const LoginScreen = ({route,navigation}) => {
   const client = useApolloClient();
   const [login, { loading, error,data }] = useMutation(LOG_IN, {
     onCompleted(data) {
-      // client.writeQuery({
-      //   loginQuery,
-      //   data: {
-      //     userInfo: { college:data.loginUser.college,token:data.loginUser.token },
-      //   },
-      // });
-      client.writeData({ data: {userInfo:{ college:data.loginUser.college,loggedIn:true,token:data.loginUser.token,__typename: 'User'}} });
+      console.log(data)//whenever you mutate, you have to write the data to the cache.
+      client.writeData({ data: {userInfo:{ username:data.loginUser.username, college:data.loginUser.college,loggedIn:true,token:data.loginUser.token,__typename: 'User'}} });
     }
   });
   
@@ -78,8 +65,6 @@ const LoginScreen = ({route,navigation}) => {
     }
   };
   useEffect(() => {
-    // Update the document title using the browser API
-    // console.log(data)
   });
   return (
     <View style={styles.mainBody}>

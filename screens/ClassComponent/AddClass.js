@@ -9,9 +9,9 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 
 
 export default function AddClass({navigation,route}) {
-    const [className, classNameChange] = React.useState('Class name');
-    const [profName, profNameChange] = React.useState('Professor name');
-    const [date, setDate] = React.useState(Date.now());
+    const [className, classNameChange] = React.useState('');
+    const [profName, profNameChange] = React.useState('');
+    const [date, setDate] = React.useState(new Date());
     const {setClasses} = route.params
     const onTimeChange = (event, date) => {
         setDate(date);
@@ -22,8 +22,6 @@ export default function AddClass({navigation,route}) {
         let hour = date.getHours();
         console.log(hour)
         const meridean = hour < 12 ? 'am' : 'pm'
-        hour = hour === 0 ? 12 : hour % 12//you have to use three equal signs since hour is of type 'any' and 0 is obviously of type int. with triple equal sign in js, javascript figures out the type of both objects when the objects are any. regular == works if ur comparing two integers or two strings so whenever the compiler knows the type. 
-        console.log(hour)
         const time = `${hour}:${minutes} ${meridean}`
         const newClass = {
             className,
@@ -39,14 +37,15 @@ export default function AddClass({navigation,route}) {
             <TextInput
                 style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
                 onChangeText={text => classNameChange(text)}
+                placeholder="Add Class"
                 value={className}
             />
             <TextInput
                 style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
                 onChangeText={text => profNameChange(text)}
+                placeholder="Add Professor Name"
                 value={profName}
             />
-            
             <DateTimePicker
                 testID="dateTimePicker"
                 value={date}

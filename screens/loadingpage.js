@@ -13,6 +13,7 @@ const loginQuery = gql`
     userInfo{
       college
       token
+      username
     }
   }
 `;
@@ -24,10 +25,6 @@ export default function LoadingPage({client}){
     const [userData,setUserData] = useState(null)
     // const client = useApolloClient();
     useEffect(()=>{
-        if(data){
-           console.log(data.userInfo.token) 
-        }
-        
         try{
             const user = client.readQuery({//readQuery triggers only when user opens/closes app so refresh
                 //this reads from cache only on componentdidmount check if user is already logged in  
@@ -38,7 +35,6 @@ export default function LoadingPage({client}){
                         }
                 }
             `}).userInfo
-            console.log(user.token)
             if(user.token)setUserData(user)
         }catch{
             setUserData(null)

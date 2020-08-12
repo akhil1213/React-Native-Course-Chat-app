@@ -2,6 +2,8 @@ const { ApolloServer, gql } = require('apollo-server-express');
 const db = require("./db.js")
 const { signup } = require("./userauth/signup")
 const { login } = require("./userauth/login")
+const { fetchClasses,fetchStudentsForSpecificClass} = require("./classes/fetchclasses")
+const {insertClass} = require("./classes/insertclass")
 // const { authorize } = require("./userauth/login")
 const auth = require("./userauth/middleware/auth")
 const express = require('express')
@@ -25,8 +27,9 @@ const typeDefs = gql`
     coursename: String
     profname: String
     time: String
-    id: String
-    createdBy: User
+  }
+  type Student{
+    username:String
   }
   input RegisterUserInput {
     username: String!
@@ -35,10 +38,11 @@ const typeDefs = gql`
     email: String!
   }
   type Query {
-    classes: [Class]
+    classes(username:String!): [Class]
+    students(classname:String!):[Student]
   }
   type Mutation{
-    createClass(coursename:String,profname:String,time:String):String
+    createClass(coursename:String,profname:String,time:String,username:String):String
     signupUser(username:String, password:String, college:String ): User!
     loginUser(username:String, password:String): User!
     authorize(token:String):User!
@@ -48,29 +52,37 @@ const typeDefs = gql`
 
 // Resolvers define the technique for fetching the types defined in the
 // schema. This resolver retrieves books from the "books" array above.
+// query classes{
+//   classes(username:"akhil1213"){
+//     coursename
+//   }
+// }
 const resolvers = {
     Query: {
-      classes: async () => {
-        const classes = await db('class')
-        console.log(classes)
-        return classes
+      classes: async (_,{username}) => {
+        const classes = fetchClasses(username)
+        return classes  
+      },
+      students: async(_,{classname}) =>{
+        const students = fetchStudentsForSpecificClass(classname)
+        console.log(students)
+        return students
       }
     },
     Mutation:{
       createClass: async ( _,classObject ) => {
-        console.log(classObject)
-        const res = await db('class').insert(classObject)
-        console.log(res)
+        const res = insertClass(classObject)
         return res
       },
       signupUser:async(_, userObject ) => {
-        console.log('signup beging triggered)')
-        console.log(userObject)
         return signup(userObject)
       },
       loginUser:async(_,userObject) =>{
         console.log(userObject)
-        return login(userObject)
+
+        const res = login(userObject)
+        console.log(res)
+        return res
       },
       authorize:async(_,{token}) =>{
         console.log(auth)
@@ -81,11 +93,11 @@ const resolvers = {
 const server = new ApolloServer({ typeDefs, resolvers });
  
 const app = express();
-// app.use(cors())
+app.use(cors())
 server.applyMiddleware({ app });
  
 app.listen(4000, () =>
-  console.log(`🚀 Server ready at http://192.168.2.62:4000${server.graphqlPath}`)
+  console.log(`🚀 Server ready at http://192.168.1.51:4000${server.graphqlPath}`)
 );
 
 

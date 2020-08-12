@@ -1,14 +1,8 @@
 import React from "react";
 import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar } from "react-native";
 import Swipeout from 'react-native-swipeout'
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
-
-
-{/* <FlatList
-               data={this.state.images}
-               renderItem={({ item }) => {
-                  console.log({item})
-               return( */}
 const swipeoutBtns = [
     {
         onPress: () =>{
@@ -28,17 +22,20 @@ const swipeoutBtns = [
 const Item = ({ item }) => (
   <Swipeout style = {styles.swipeout} autoClose={true} right={swipeoutBtns}>
     <View style={styles.item}>
-        <Text style={styles.title}>{item.className}</Text>
-        <Text>{item.profName}</Text>
+        <Text style={styles.title}>{item.coursename}</Text>
+        <Text>{item.profname}</Text>
         <Text>{item.time}</Text>
     </View>
   </Swipeout>
 );
 
 
-const ListOfClasses = ({classes}) => {
+const ListOfClasses = ({navigation,classes}) => {
+  console.log(navigation)
   const renderItem = ({ item }) => (
-    <Item item={item} />
+    <TouchableWithoutFeedback onPress={()=>navigation.navigate('Students',{coursename:item.coursename})}>
+      <Item item={item} />
+    </TouchableWithoutFeedback>
   );
 
   return (
@@ -47,7 +44,6 @@ const ListOfClasses = ({classes}) => {
         renderItem={renderItem}
         keyExtractor={item => item.id}
       />
-    
   );
 }
 
@@ -57,7 +53,6 @@ const styles = StyleSheet.create({
     marginTop: StatusBar.currentHeight || 0,
   },
   item: {
-    // backgroundColor: '#f9c2ff',
     borderBottomColor:'#c8c9cc',
     borderBottomWidth:2,
     padding: 35,

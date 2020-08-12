@@ -38,14 +38,14 @@ const styles = StyleSheet.create({
         paddingTop: Constants.statusBarHeight,
     },
     descriptionContainer:{
-        marginTop:'40px',
+        marginTop:40,
         textAlign:'center'
     },
     description:{
         color:'#2a5d96',
         fontWeight:'900',
         fontSize:20,
-        marginTop:'15px'
+        marginTop:15
     },
     name:{
         color:'#2a5d96',

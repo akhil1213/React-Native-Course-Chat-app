@@ -4,45 +4,49 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Constants from "expo-constants";
 import ListOfClasses from "./ClassList"
 import AddClass from "./AddClass"
-
+import Students from "./students"
 import { createStackNavigator } from '@react-navigation/stack';
-
-
+import { useApolloClient, useMutation, useQuery } from "@apollo/react-hooks";
+import { gql } from '@apollo/client';
+const GET_CLASSES = gql`
+    query classes($username:String!){
+        classes(username:$username){
+            coursename
+            profname
+            time
+        }
+    }
+`
+const GET_USER_INFO = gql`
+    query UserInfo {
+        userInfo {
+            username
+        }
+    }
+`
 const StackNavigator = createStackNavigator();
 // https://stackoverflow.com/questions/32030050/how-can-you-float-right-in-react-native
 
-const DATA = [
-    {
-      id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-      className:'CS-381',
-      profName:'Akhil Khanna',
-      time:'01:30'
-    },
-    {
-      id: "bd7acbea-c1b1-462-aed5-3ad53abb28ba",
-      className:'CS-381',
-      profName:'Akhil Khanna',
-      time:'01:30'
-    },
-    {
-      id: "bd7acbea-c1b1-46c2aed5-3ad53abb28ba",
-      className:'CS-381',
-      profName:'Akhil Khanna',
-      time:'01:30'
-    },
-    
-  ];
 
 function ClassScreen({navigation}){
-    const [classes,setClasses] = React.useState(DATA)
+    const client = useApolloClient()
+    const username = client.readQuery({ 
+        query: GET_USER_INFO
+    }).userInfo.username
+    console.log(username)
+    const { loading, error,data } = useQuery(GET_CLASSES,{
+        variables:{username:username}
+    })
+
     return(
         <View style={styles.container}>
+            <p>{loading}</p>
             <View style = {styles.topRight}>
                 <TouchableOpacity onPress = {() => {navigation.navigate('AddClassModal',{setClasses})}}>
                     <MaterialCommunityIcons name="book-plus-multiple" size={48} />
                 </TouchableOpacity>
             </View>
-            <ListOfClasses classes={classes}/>
+            <ListOfClasses navigation={navigation} classes={data.classes}/>
         </View>
     )
 }
@@ -51,6 +55,7 @@ export default function ClassesScreen({navigation}) {
         <StackNavigator.Navigator>
             <StackNavigator.Screen name="ClassList" component ={ClassScreen}/>
             <StackNavigator.Screen name="AddClassModal" component ={AddClass}/>
+            <StackNavigator.Screen name = "Students" component={Students}/>
         </StackNavigator.Navigator>
     );
 }

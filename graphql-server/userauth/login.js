@@ -13,6 +13,7 @@ const login = async (userRequest) => {
         // await updateUserToken(token,user)
         user.token = token
         delete user.password_digest
+        console.log(user)
         return user
     }catch(err){
         return err

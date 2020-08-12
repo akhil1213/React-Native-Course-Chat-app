@@ -14,7 +14,7 @@ import { persistCache } from 'apollo-cache-persist';
 import LoadingPage from './screens/loadingpage'
 const cache = new InMemoryCache();
 const link = new HttpLink({
-  uri: "http://localhost:4000/graphql"
+  uri: "http://192.168.1.51:4000/graphql"
 });
 persistCache({
   cache,

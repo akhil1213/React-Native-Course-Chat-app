@@ -51,13 +51,13 @@ const styles = StyleSheet.create({
         alignItems:'center'
     },
     buttons:{
-        marginBottom:'50px'
+        marginBottom:50
     },
     button:{
         backgroundColor:'#42c8f5',
         color:'white',
         fontWeight:'bold',
-        marginTop:'7px',
+        marginTop:7,
         paddingHorizontal:100,
         paddingVertical:10
     },
@@ -66,14 +66,18 @@ const styles = StyleSheet.create({
         fontWeight:'800'
     },
     descriptionContainer:{
-        marginTop:'40px',
-        textAlign:'center'
+        marginTop:90,
+        textAlign:'center',
+        alignItems:'center',
+        paddingLeft:2,
+        paddingRight:2,
+        
     },
     description:{
         color:'#ebe834',
         fontWeight:'900',
         fontSize:20,
-        marginTop:'15px'
+        marginTop:15
     },
     name:{
         color:'#ebe834',

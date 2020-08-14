@@ -30,10 +30,10 @@ const Item = ({ item }) => (
 );
 
 
-const ListOfClasses = ({navigation,classes}) => {
+const ListOfClasses = ({navigation,classes,username}) => {
   console.log(navigation)
   const renderItem = ({ item }) => (
-    <TouchableWithoutFeedback onPress={()=>navigation.navigate('Students',{coursename:item.coursename})}>
+    <TouchableWithoutFeedback onPress={()=>navigation.navigate('Students',{coursename:item.coursename,username:username})}>
       <Item item={item} />
     </TouchableWithoutFeedback>
   );

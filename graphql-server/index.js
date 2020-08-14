@@ -2,7 +2,7 @@ const { ApolloServer, gql } = require('apollo-server-express');
 const db = require("./db.js")
 const { signup } = require("./userauth/signup")
 const { login } = require("./userauth/login")
-const { fetchClasses,fetchStudentsForSpecificClass} = require("./classes/fetchclasses")
+const { fetchClasses,fetchStudentsForSpecificClass, fetchAllClassmatesAlongWithTheirSimilarClasses} = require("./classes/fetchclasses")
 const {insertClass} = require("./classes/insertclass")
 // const { authorize } = require("./userauth/login")
 const auth = require("./userauth/middleware/auth")
@@ -31,6 +31,10 @@ const typeDefs = gql`
   type Student{
     username:String
   }
+  type StudentWithClass{
+    classmate:String
+    coursename:String
+  }
   input RegisterUserInput {
     username: String!
     password: String!
@@ -39,7 +43,8 @@ const typeDefs = gql`
   }
   type Query {
     classes(username:String!): [Class]
-    students(classname:String!):[Student]
+    students(classname:String!,username:String!):[Student]
+    studentsWithClasses(username:String!):[StudentWithClass]
   }
   type Mutation{
     createClass(coursename:String,profname:String,time:String,username:String):String
@@ -63,10 +68,14 @@ const resolvers = {
         const classes = fetchClasses(username)
         return classes  
       },
-      students: async(_,{classname}) =>{
-        const students = fetchStudentsForSpecificClass(classname)
+      students: async(_,{classname,username}) =>{
+        const students = fetchStudentsForSpecificClass(classname,username)
         console.log(students)
         return students
+      },
+      studentsWithClasses: async(_,{username}) =>{
+        const res = fetchAllClassmatesAlongWithTheirSimilarClasses(username)
+        return res
       }
     },
     Mutation:{

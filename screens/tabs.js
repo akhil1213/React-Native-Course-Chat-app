@@ -2,22 +2,12 @@ import  React, {useEffect} from 'react';
 import HomeScreen from './HomeComponent/home'
 import SettingsScreen from './SettingsComponent/settings'
 import ClassScreen from './ClassComponent/ClassScreen'
+import MessageScreen from './MessageScreen/SearchClassmates'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {
-    View,
-    Text,
-    
-  } from 'react-native';
+
 const Tab = createBottomTabNavigator();
 
-function MessageScreen() {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Messages!</Text>
-      </View>
-    );
-}
 export default function MyTabs() {
   return (
     <Tab.Navigator

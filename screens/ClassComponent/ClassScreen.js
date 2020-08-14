@@ -35,9 +35,8 @@ function ClassScreen({navigation}){
     }).userInfo.username
     console.log(username)
     const { loading, error,data } = useQuery(GET_CLASSES,{
-        variables:{username:username}
+        variables:{username}
     })
-
     return(
         <View style={styles.container}>
             <p>{loading}</p>
@@ -46,7 +45,7 @@ function ClassScreen({navigation}){
                     <MaterialCommunityIcons name="book-plus-multiple" size={48} />
                 </TouchableOpacity>
             </View>
-            <ListOfClasses navigation={navigation} classes={data.classes}/>
+            <ListOfClasses navigation={navigation} classes={data.classes} username={username}/>
         </View>
     )
 }

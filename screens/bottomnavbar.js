@@ -3,15 +3,6 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
 
-const bottomTabNavigator = createBottomTabNavigator(
-    {
-      Home: HomeScreen,
-      Explore: ExploreScreen,
-    },
-    {
-      initialRouteName: 'Home'
-    }
-);
 export default function BottomNavBar() {
   return (
     <Tab.Navigator>

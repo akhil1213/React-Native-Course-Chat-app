@@ -30,11 +30,35 @@ export default function SearchClassmates({navigation,route}) {
     })
     if(loading)console.log(loading)
     else if(error)console.log(error)
-    console.log(data)
-    // for(const classmateWithClass in data.students)
+    let classmatesAndClasses = {}
+    classmatesAndClasses['johndoe'] = ['CS-50','CS-381']
+    for(let i = 0; i < data.studentsWithClasses.length; i++){
+        const classmate = data.studentsWithClasses[i].classmate
+        const commonClass = data.studentsWithClasses[i].coursename
+        if(classmatesAndClasses[classmate] == null) {
+            classmatesAndClasses[classmate] = [commonClass]
+        }else{
+            classmatesAndClasses[classmate].push(commonClass);
+        }
+    }
     return (
-        <View>
-            <Text>SearchClassmates component!</Text>
+        <View style={styles.container}>
+            {
+                Object.keys(classmatesAndClasses).map((classmate)=>{
+                    return (
+                        <View key={classmate} style={styles.row}>
+                            <Text style={styles.classmate}>{classmate}</Text>
+                            <View style={styles.commonClasses}>
+                                {
+                                    classmatesAndClasses[classmate].map((commonClass)=>{
+                                        return <Text key={commonClass} style={styles.commonClass}>{commonClass}</Text>
+                                    })
+                                }
+                            </View>
+                        </View>
+                    )
+                })
+            }
         </View>
     );
 }
@@ -42,6 +66,26 @@ export default function SearchClassmates({navigation,route}) {
 const styles = StyleSheet.create({
     container: {
         paddingTop: Constants.statusBarHeight,
+        marginLeft:8,
+        marginTop:20
+    },
+    row:{
+        flexDirection:'row',
+        justifyContent:'space-between',
+        paddingTop:16,
+        paddingBottom:16,
+        borderBottomWidth:4,
+        borderBottomColor:'#e0dede'
+    },
+    commonClasses:{
+        flexDirection:'row',
+    },
+    commonClass:{
+        marginLeft:6
+    },
+    classmate:{
+        fontWeight:"bold",
+        fontSize:15
     },
     topRight:{
         alignItems: 'flex-end'

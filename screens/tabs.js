@@ -2,7 +2,7 @@ import  React, {useEffect} from 'react';
 import HomeScreen from './HomeComponent/home'
 import SettingsScreen from './SettingsComponent/settings'
 import ClassScreen from './ClassComponent/ClassScreen'
-import MessageScreen from './MessageScreen/SearchClassmates'
+import MessageScreen from './MessageScreen/MessageScreen'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 

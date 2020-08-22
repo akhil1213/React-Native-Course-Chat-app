@@ -55,7 +55,7 @@ function ClassScreen({ navigation }) {
     </View>
   );
 }
-export default function ClassesScreen({ navigation }) {
+export default function ClassesScreen() {
   return (
     <StackNavigator.Navigator>
       <StackNavigator.Screen name="ClassList" component={ClassScreen} />

@@ -69,7 +69,7 @@ function ChattingScreen() {
         onContentSizeChange={() =>
           scrollViewRef.current.scrollToEnd({ animated: true })
         }
-        style={styles.messagesContainer}
+        style={[styles.messagesContainer]}
       >
         {messages.map((message) => {
           if (message.from == username) {
@@ -82,7 +82,6 @@ function ChattingScreen() {
                   }}
                   style={styles.sendersIcon}
                 />
-
                 <View style={[styles.messageLeft, styles.message]}>
                   <Text style={{ color: "#ebeef2" }}>{message.text}</Text>
                 </View>
@@ -101,10 +100,6 @@ function ChattingScreen() {
         <MessageInput />
       </View>
     </KeyboardAvoidingView>
-    /* <View style={styles.input}>
-        <MessageInput />
-      </View> */
-    // </View>
   );
 }
 const styles = StyleSheet.create({
@@ -115,9 +110,7 @@ const styles = StyleSheet.create({
   messagesContainer: {
     flex: 1,
     flexDirection: "column",
-    // height: 300,
-    // justifyContent: "space-evenly",
-    // justifyContent: "flex-end",
+    height: 15,
   },
   messageLeft: {
     alignSelf: "flex-start",

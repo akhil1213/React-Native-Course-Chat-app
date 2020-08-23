@@ -1,37 +1,51 @@
 import React from "react";
 import {
   TextInput,
-  Keyboard,
   Text,
   TouchableOpacity,
   View,
   StyleSheet,
-  Animated,
+  Image,
 } from "react-native";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+
 function ChattersScreen({ navigation }) {
   return (
     <View>
-      <TouchableOpacity
-        onPress={() => navigation.navigate("Search for Students")}
-      >
-        <MaterialIcons name="person-add" size={48} />
-      </TouchableOpacity>
-
       {[
         { user: "akhil121398", lastMessage: "hey how u been", seen: false },
         {
           user: "johndoe",
-          lastMessage: "dude ur always coding react",
+          lastMessage:
+            "dude ur always coding react kfs dfks dkf skjdf ksjdf ksd fjksd fksd fksd fk",
           seen: false,
         },
       ].map((chatter) => {
         return (
-          <View style={styles.chatter}>
-            <Text>{chatter.user}</Text>
-            <Text>{chatter.lastMessage}</Text>
-          </View>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("Messages", {
+                classmateName: chatter.user,
+              })
+            }
+          >
+            <View style={styles.chatter}>
+              <Image
+                source={{
+                  uri:
+                    "https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png",
+                }}
+                style={styles.sendersIcon}
+              />
+              <View>
+                <Text style={styles.userText}>{chatter.user}</Text>
+                <Text style={styles.lastMessage}>
+                  {chatter.lastMessage.length > 30
+                    ? chatter.lastMessage.substring(0, 27) + "..."
+                    : chatter.lastMessage}
+                </Text>
+              </View>
+            </View>
+          </TouchableOpacity>
         );
       })}
     </View>
@@ -41,6 +55,20 @@ const styles = StyleSheet.create({
   chatter: {
     flex: 1,
     flexDirection: "row",
+    padding: 10,
+  },
+  sendersIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: 3,
+    marginRight: 6,
+  },
+  userText: {
+    fontSize: 15,
+    fontWeight: "bold",
+  },
+  lastMessage: {
+    maxWidth: 200,
   },
 });
 export default ChattersScreen;

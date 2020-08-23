@@ -53,10 +53,14 @@ export default function SearchClassmates({ navigation, route }) {
     <View style={styles.container}>
       {Object.keys(classmatesAndClasses).map((classmate) => {
         return (
-          <View key={classmate} style={styles.row}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("Messages with {nameofuser}")}
-            >
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("Messages", {
+                classmateName: classmate,
+              })
+            }
+          >
+            <View key={classmate} style={styles.row}>
               <Text style={styles.classmate}>{classmate}</Text>
               <View style={styles.commonClasses}>
                 {classmatesAndClasses[classmate].map((commonClass) => {
@@ -67,8 +71,8 @@ export default function SearchClassmates({ navigation, route }) {
                   );
                 })}
               </View>
-            </TouchableOpacity>
-          </View>
+            </View>
+          </TouchableOpacity>
         );
       })}
     </View>

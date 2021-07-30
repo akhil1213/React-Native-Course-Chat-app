@@ -1,30 +1,21 @@
-const { ApolloServer, gql } = require("apollo-server-express");
+import { ApolloServer, gql } from "apollo-server-express"
+import express from "express"
+import cors from "cors"
+// import { typeDefs } from './typedefs'
+import schema from './schema/makeSchema'
+const startServer = async () => {
+  const server = new ApolloServer({ schema });
 
-const express = require("express");
-const cors = require("cors");
-var { buildSchema } = require("graphql");
-const { typeDefs } = require("./typedefs");
-const { resolvers } = require("./resolvers");
-// A schema is a collection of type definitions (hence "typeDefs")
-// that together define the "shape" of queries that are executed against
-// your data.
+  const app = express();
+  app.use(cors());
+  await server.start();
+  server.applyMiddleware({ app });
 
-// Resolvers define the technique for fetching the types defined in the
-// schema. This resolver retrieves books from the "books" array above.
-// query classes{
-//   classes(username:"akhil1213"){
-//     coursename
-//   }
-// }
+  app.listen(4000, () =>
+    console.log(
+      `🚀 Server ready at http://localhost.com${server.graphqlPath}`
+    )
+  );
+}
 
-const server = new ApolloServer({ typeDefs, resolvers });
-
-const app = express();
-app.use(cors());
-server.applyMiddleware({ app });
-
-app.listen(4000, () =>
-  console.log(
-    `🚀 Server ready at http://192.168.1.51:4000${server.graphqlPath}`
-  )
-);
+startServer();

@@ -24,22 +24,22 @@ import { Mutation } from 'react-apollo';
 
 
 const SIGN_UP = gql`
-  mutation signupUser($username: String!, $password:String!, $college:String!) {
+  mutation signupUser($email: String!, $password:String!, $college:String!) {
     signupUser(
-      username: $username,
+      email: $email,
       password:$password,
       college:$college
     )
     {
       
-        username
+        email
         college
       
     }
   }
 `;
 const RegisterScreen = props => {
-  let [userName, setUserName] = useState('');
+  let [email, setEmail] = useState('');
   let [password, setPassword] = useState('');
   let [college, setCollege] = useState('');
   let [loading, setLoading] = useState(false);
@@ -52,7 +52,7 @@ const RegisterScreen = props => {
 
   const handleSubmitButton = async (signupUser) => {
     setErrortext('');
-    if (!userName) {
+    if (!email) {
       alert('Please fill Name');
       return;
     }
@@ -69,7 +69,7 @@ const RegisterScreen = props => {
       return;
     }
     try{
-      signupUser({ variables: { username:userName,password:password,college:college } })
+      signupUser({ variables: { email:email,password:password,college:college } })
     }catch(err){
       console.log(err)
     }
@@ -114,7 +114,7 @@ const RegisterScreen = props => {
           <View style={styles.SectionStyle}>
             <TextInput
               style={styles.inputStyle}
-              onChangeText={UserName => setUserName(UserName)}
+              onChangeText={email => setEmail(email)}
               underlineColorAndroid="#FFFFFF"
               placeholder="Enter Name"
               placeholderTextColor="#F6F6F7"
@@ -153,7 +153,7 @@ const RegisterScreen = props => {
           {errortext != '' ? (
             <Text style={styles.errorTextStyle}> {errortext} </Text>
           ) : null}
-          <Mutation mutation={SIGN_UP} variables={{ userName,password,college }}>
+          <Mutation mutation={SIGN_UP} variables={{ email,password,college }}>
             {(signup, { data, loading, error }) => 
               <View>
                   <TouchableOpacity

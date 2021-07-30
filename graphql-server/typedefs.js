@@ -1,4 +1,4 @@
-const { ApolloServer, gql } = require("apollo-server-express");
+import { gql } from "apollo-server-express" 
 
 const typeDefs = gql`
   type User {
@@ -10,8 +10,8 @@ const typeDefs = gql`
     password_digest: String
   }
   type Class {
-    coursename: String
-    profname: String
+    course_name: String
+    professor_name: String
     time: String
   }
   type Student {
@@ -34,7 +34,7 @@ const typeDefs = gql`
     email: String!
   }
   type Query {
-    classes(username: String!): [Class]
+    classes(user_id: Int!): [Class]
     students(classname: String!, username: String!): [Student]
     studentsWithClasses(username: String!): [StudentWithClass]
     chatters(username: String!): [Chatter]
@@ -51,6 +51,7 @@ const typeDefs = gql`
     authorize(token: String): User!
   }
 `;
-module.exports = {
-  typeDefs,
-};
+
+export {
+  typeDefs
+}

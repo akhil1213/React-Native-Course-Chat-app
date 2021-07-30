@@ -1,4 +1,4 @@
-const database = require("../db.js");
+import database from "../../../database/knex/knex";
 
 const fetchChatters = async (username) => {
   return new Promise((resolve, reject) => {
@@ -16,6 +16,4 @@ const fetchChatters = async (username) => {
   });
 };
 
-module.exports = {
-  fetchChatters,
-};
+export default fetchChatters;

@@ -1,4 +1,4 @@
-import { gql } from "apollo-server-express"
+import { gql } from "apollo-server-express" 
 
 const ChattersSchema = `
 
@@ -10,21 +10,16 @@ const ChattersSchema = `
     classmate: String
     coursename: String
   }
-  type Message {
-      seen: Boolean
-      body: String
-  }
   type Chatter {
-    time_sent: String!
-    sender_user_name: String!
-    receiver_user_name: String!
-    lastMessageSent: Message!
-    currentUserSentLast: Boolean
+    username: String
+    created_at: String
+    body: String
+    seen: Boolean
   }
   extend type Query {
     students(classname: String!, username: String!): [Student]
     studentsWithClasses(username: String!): [StudentWithClass]
-    chatters(userId: Int!): [Chatter]
+    chatters(username: String!): [Chatter]
   }
 `;
 

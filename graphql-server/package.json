@@ -28,7 +28,8 @@
     "knex": "",
     "make-executable-schema": "^5.0.2",
     "nodemon": "^2.0.12",
-    "pg": ""
+    "pg": "",
+    "sequelize": "^6.6.5"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",

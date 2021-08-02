@@ -3,8 +3,8 @@ import { fetchChatters, fetchAllClassmatesAlongWithTheirSimilarClasses, fetchStu
 
 const ChattersQuery = {
     Query: {
-        chatters: async (_, { userId }) => {
-            const chatters = fetchChatters(userId);
+        chatters: async (_, { username }) => {
+            const chatters = fetchChatters(username);
             return chatters;
         },
         students: async (_, { classname, username }) => {
